@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,15 +36,24 @@ public class ClientService {
 
     public ClientDto findById(Long id) {
         LOGGER.info("Finding client with id : {}", id);
-        Optional<Client> optionalClient = this.clientDao.findById(id);
-        if (optionalClient.isEmpty()) {
+        Client clientFound = this.clientDao.findWithOrderById(id);
+        if (clientFound == null) {
             LOGGER.info("Found nothing");
             return null;
         }
         //else...
-        Client clientFound = optionalClient.get();
         LOGGER.info("Found : {}", clientFound);
         return toDto(clientFound);
+    }
+
+
+    public List<ClientDto> findAll() {
+        LOGGER.info("Finding all clients");
+        List<ClientDto> dtos= new ArrayList<>();
+        for(Client client : this.clientDao.findAll()){
+            dtos.add(toDto(client));
+        }
+        return dtos;
     }
 
     @Transactional
@@ -55,8 +66,8 @@ public class ClientService {
     @Transactional
     public ClientDto update(Long id, ClientDto clientDto) {
         LOGGER.info("Updating client : {} , with id : {}", clientDto, id);
-        Optional<Client> optionalClient = this.clientDao.findById(id);
-        if (optionalClient.isEmpty()) {
+        Client optionalClient = this.clientDao.findWithOrderById(id);
+        if (optionalClient== null) {
             return null;
         }
         //else...

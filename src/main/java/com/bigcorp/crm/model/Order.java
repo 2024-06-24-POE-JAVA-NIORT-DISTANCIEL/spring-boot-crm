@@ -13,7 +13,7 @@ public class Order {
     private String serviceType;
     private Integer tva;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLIENT_ID")
     private Client client;
 

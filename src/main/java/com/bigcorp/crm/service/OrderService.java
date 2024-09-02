@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -46,6 +48,15 @@ public class OrderService {
         Order orderFound = optionalOrder.get();
         LOGGER.info("Found : {}", orderFound);
         return toDto(orderFound);
+    }
+
+    public List<OrderDto> findAll() {
+        LOGGER.info("Finding all orders");
+        List<OrderDto> dtos= new ArrayList<>();
+        for(Order order : this.orderDao.findAll()){
+            dtos.add(toDto(order));
+        }
+        return dtos;
     }
 
     @Transactional

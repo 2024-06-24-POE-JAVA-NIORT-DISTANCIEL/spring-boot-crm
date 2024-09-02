@@ -1,10 +1,13 @@
 package com.bigcorp.crm.controller;
 
+import com.bigcorp.crm.controller.dto.ClientDto;
 import com.bigcorp.crm.controller.dto.OrderDto;
 import com.bigcorp.crm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -12,6 +15,11 @@ public class OrderRestController {
 
     @Autowired
     private OrderService orderService;
+
+    @GetMapping
+    public List<OrderDto> getAll() {
+        return orderService.findAll();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderDto> getOrderWithPathVariable(@PathVariable("id") Long id) {
